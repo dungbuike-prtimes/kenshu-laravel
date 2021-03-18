@@ -18,5 +18,6 @@ if (isset($_SESSION['type'])) {
     unset($_SESSION['type']);
     unset($_SESSION['status']);
     unset($_SESSION['message']);
-
 }
+@section('message')
+@endsection

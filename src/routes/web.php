@@ -12,11 +12,11 @@
 */
 
 
-Route::get('/', "homeController@index")->name('home.index');
-Route::get('/auth/login', "UserController@login")->name('auth.login');
-Route::post('/auth', "UserController@auth")->name('auth');
-Route::get('/auth/register', "UserController@register")->name('auth.register');
-Route::post('/auth/register', "UserController@store")->name('auth.create');
+Route::get('/', "homeController@index")->name('home');
+Route::get('/login', "Auth\LoginController@login")->name('login');
+Route::post('/auth', "Auth\LoginController@auth")->name('auth');
+Route::get('/register', "Auth\RegisterController@register")->name('register');
+Route::post('/register', "Auth\RegisterController@create")->name('auth.create');
 
 Route::group(['middleware' => 'auth'], function ()  {
     Route::get('/auth/logout', "UserController@logout")->name('auth.logout');

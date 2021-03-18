@@ -1,0 +1,178 @@
+@import "base";
+
+.form {
+  width: 100%;
+  border: solid 1px #6c757d;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 10px;
+
+  &__field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  &__label {
+    font-size: 20px;
+  }
+
+  &__input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+
+    &--select2 {
+      height: 40px;
+    }
+
+    &--image {
+      width: 90%;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+  }
+
+  &__text-area {
+    height: 250px;
+    margin-top: 10px;
+  }
+
+  &__file-upload {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+
+    &-cancel {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      color: #000;
+    }
+  }
+
+  &__image-preview {
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  &__button-group {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+  }
+
+  &__tag-field {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__tag {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 100%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem 0 .25rem .25rem;
+    color: #fff;
+    background-color: #5eab02;
+    margin-right: 20px;
+    position: relative;
+    cursor: pointer;
+
+    form &::after {
+      content: 'x';
+      position: absolute;
+      font-size: 10px;
+      right: -12px;
+      top: 0;
+      background-color: #dc3545;
+      padding: 2px 3px;
+      font-family: Arial;
+    }
+  }
+}
+
+.form__image-preview-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: solid 1px #6c757d;
+  padding: 2px;
+  border-radius: 2px;
+  box-shadow: #6c757d 5px 5px;
+  margin-right: 10px;
+  max-height: 267px;
+  max-width: 231px;
+}
+
+.--pull-right {
+  margin-left: auto;
+}
+
+.--center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.--bottom {
+  margin-top: auto;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+  &__content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  &__header {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-bottom: #545b62 1px solid;
+  }
+}
+
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  top: 20px;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="../../css/auth.css">
-    <link rel="stylesheet" href="../../css/styles.css">
-
-</head>
-<body>
-<div class='container'>
+@extends('layouts/auth-master')
+@section('content')
     <div class='form'>
         <div class='form__header'>
             <h1 class='form__header-text'>Register</h1>
-            <span>I have an account already! <a href="/auth/login">Login now</a></span>
+            <span>I have an account already! <a href="{{ route('login') }}">Login now</a></span>
         </div>
-        <form class="form__body" method="post" action="/auth/register">
-            <?php
-            include_once __DIR__ . "/../components/message.blade.php";
-            ?>
+        <form class="form__body" method="post" action="{{ route('auth.create') }}">
+            @csrf
             <div class="form__field">
                 <label class="form__field-label" for="email">Email</label>
                 <input class="form__field-input" placeholder="Email" type="text" name="email"/>
@@ -39,7 +30,6 @@
             <input type="submit" class="form__submit form__button--success" value="Register" />
         </form>
     </div>
-</div>
-</body>
-</html>
+@endsection
+
 
