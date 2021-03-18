@@ -8,9 +8,7 @@ services:
       - "./infra/mysql:/var/lib/mysql"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=prt_db
-      - MSQL_USER=dungbk
-      - MYSQL_PASSWORD=123456
+      - MYSQL_DATABASE=prt_laravel
     ports:
       - "3306:3306"
   phpmyadmin:
@@ -25,7 +23,7 @@ services:
       - mysql
     restart: always
     ports:
-      - "4040:4040"
+      - "4040:80"
     volumes:
       - "./infra/phpmyadmin/sessions:/sessions"
   nginx:
