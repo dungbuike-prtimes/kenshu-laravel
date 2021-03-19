@@ -3,17 +3,18 @@
     <div class='form'>
         <div class='form__header'>
             <h1 class='form__header-text'>Register</h1>
-            <span>I have an account already! <a href="{{ route('login') }}">Login now</a></span>
+            <span>I have an account already! <a href="{{ route('showLoginForm') }}">Login now</a></span>
         </div>
-        <form class="form__body" method="post" action="{{ route('auth.create') }}">
+        <form class="form__body" method="post" action="{{ route('register') }}">
             @csrf
+            @include('components.message')
             <div class="form__field">
                 <label class="form__field-label" for="email">Email</label>
                 <input class="form__field-input" placeholder="Email" type="text" name="email"/>
             </div>
             <div class="form__field">
                 <label class="form__field-label" for="username">Username</label>
-                <input class="form__field-input" placeholder="Username" type="text" name="username"/>
+                <input class="form__field-input" placeholder="Username" type="text" name="name"/>
             </div>
             <div class="form__field">
                 <label class="form__field-label" for="phone_number">Phone Number</label>
@@ -25,7 +26,7 @@
             </div>
             <div class="form__field">
                 <label class="form__field-label" for="confirm_password">Confirm Password</label>
-                <input class="form__field-input" placeholder="Confirm Password" type="password" name="confirm_password"/>
+                <input class="form__field-input" placeholder="Confirm Password" type="password" name="password_confirmation"/>
             </div>
             <input type="submit" class="form__submit form__button--success" value="Register" />
         </form>

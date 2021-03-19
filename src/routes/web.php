@@ -12,24 +12,27 @@
 */
 
 
-Route::get('/', "homeController@index")->name('home');
-Route::get('/login', "Auth\LoginController@login")->name('login');
-Route::post('/auth', "Auth\LoginController@auth")->name('auth');
-Route::get('/register', "Auth\RegisterController@register")->name('register');
+Route::get('/', "HomeController@index")->name('home');
+Route::get('/login', "Auth\LoginController@showLoginForm")->name('showLoginForm');
+Route::post('/auth', "Auth\LoginController@login")->name('login');
+Route::get('/register', "Auth\RegisterController@showRegistrationForm")->name('showRegistrationForm');
 Route::post('/register', "Auth\RegisterController@create")->name('auth.create');
+Route::get('/logout', "Auth\LoginController@logout")->name('logout')->middleware('auth');
 
-Route::group(['middleware' => 'auth'], function ()  {
-    Route::get('/auth/logout', "UserController@logout")->name('auth.logout');
-    Route::get('/tags/create', "TagController@create")->name('tag.create');
-    Route::post('/tags', "TagController@store")->name('tag.store');
-    Route::get('/tags/{id}/edit', "TagController@edit")->name('tag.edit');
-    Route::post('/tags/{id}', "TagController@update")->name('tag.update');
-
-    Route::get('/posts', "PostController@index")->name('post.index');
-    Route::get('/posts/create', "PostController@create")->name('post.create');
-    Route::post('/posts', "PostController@store")->name('post.store');
-    Route::get('/posts/{id}/edit', "PostController@edit")->name('post.edit');
-    Route::get('/posts/{id}', "PostController@show")->name('post.show');
-    Route::put('/posts/{id}', "PostController@update")->name('post.update');
-    Route::delete('/posts/{id}', "PostController@delete")->name('post.delete');
+Route::group(['middleware' => 'auth', 'prefix' => 'posts'], function ()  {
+    Route::get('/', "PostController@index")->name('post.index');
+    Route::get('/create', "PostController@create")->name('post.create');
+    Route::post('/', "PostController@store")->name('post.store');
+    Route::get('/{id}/edit', "PostController@edit")->name('post.edit');
+    Route::get('/{id}', "PostController@show")->name('post.show');
+    Route::put('/{id}', "PostController@update")->name('post.update');
+    Route::delete('/{id}', "PostController@delete")->name('post.delete');
 });
+
+Route::group(['middleware' => 'auth', 'prefix' => 'tags'], function () {
+    Route::get('/create', "TagController@create")->name('tag.create');
+    Route::post('/', "TagController@store")->name('tag.store');
+    Route::get('/{id}/edit', "TagController@edit")->name('tag.edit');
+    Route::put('/{id}', "TagController@update")->name('tag.update');
+});
+

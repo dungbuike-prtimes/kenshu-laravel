@@ -48,9 +48,3 @@ services:
       - ./infra/php/php.ini:/usr/local/etc/php/conf.d/php.ini
     links:
       - "mysql"
-
-  composer:
-    image: composer
-    command: "composer install"
-    volumes:
-      - ./src:/app

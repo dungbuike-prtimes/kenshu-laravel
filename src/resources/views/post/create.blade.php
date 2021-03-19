@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post</title>
-    <link rel="stylesheet" href="../../../css/styles.css">
-    <link rel="stylesheet" href="../../../css/post.css">
-</head>
-<body>
-<?php
-include_once __DIR__ . "/../layouts/header.blade.php";
-?>
+@extends('layouts.master')
+@section('content')
 <div class="main">
     <div class="main__wrapper">
         <div class="content-container">
@@ -18,11 +8,9 @@ include_once __DIR__ . "/../layouts/header.blade.php";
             </div>
             <div class="content-container__body">
 
-                <form id="form" class="form" method="post" action="/posts" enctype="multipart/form-data">
-                    <?php
-                    include_once __DIR__ . "/../components/message.blade.php";
-                    ?>
-                    <input type="hidden" name="csrf_token" value="<?php echo $data['csrf_token'];?>">
+                <form id="form" class="form" method="post" action="{{ route('post.create') }}" enctype="multipart/form-data">
+                    @include('components.message')
+                    @csrf
                     <div class="form__field">
                         <label class="form__label" for="title">Title</label>
                         <input type="text" class="form__input" name="title" placeholder="Post Title">
@@ -38,11 +26,9 @@ include_once __DIR__ . "/../layouts/header.blade.php";
                         </div>
                         <select id="tagSelect" class="form__input form__input--select2">
                             <option value="" selected disabled>Choose Tag</option>
-                            <?php
-                            foreach ($data['tags'] as $tag) {
-                                echo '<option value="'.$tag["id"].'">'. h($tag["NAME"]).'</option>';
-                            }
-                            ?>
+{{--                            @foreach ($data['tags'] as $tag)--}}
+{{--                                <option value="{{ $tag["id"] }}">{{ $tag['name'] }}</option>--}}
+{{--                            @endforeach--}}
                         </select>
                     </div>
                     <div class="form__field">
@@ -68,7 +54,8 @@ include_once __DIR__ . "/../layouts/header.blade.php";
         </div>
     </div>
 </div>
-</body>
+@endsection
+@section('script')
 <script language="JavaScript">
     let tagSelect = document.getElementById('tagSelect');
     let tagField = document.getElementById('tagField');
@@ -114,4 +101,4 @@ include_once __DIR__ . "/../layouts/header.blade.php";
     })
 
 </script>
-</html>
+@endsection

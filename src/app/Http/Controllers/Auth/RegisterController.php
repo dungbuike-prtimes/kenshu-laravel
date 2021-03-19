@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterFormRequest;
 use App\Providers\RouteServiceProvider;
+use App\Repositories\BaseRepository;
+use App\Repositories\ImageRepositoryInterface;
+use App\Repositories\UserRepository;
+use App\Repositories\UserRepositoryInterface;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -25,6 +30,9 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+    private $userRepository;
+
+
     /**
      * Where to redirect users after registration.
      *
@@ -35,47 +43,44 @@ class RegisterController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->middleware('guest');
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+//    /**
+//     * Get a validator for an incoming registration request.
+//     *
+//     * @param  array  $data
+//     * @return \Illuminate\Contracts\Validation\Validator
+//     */
+//    protected function validator(array $data)
+//    {
+//        return Validator::make($data, [
+//            'name' => ['required', 'string', 'max:255'],
+//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+//        ]);
+//    }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param RegisterFormRequest $request
+     * @return User
      */
-    protected function create(Request $request)
+    protected function create(RegisterFormRequest $request)
     {
-        dd($request);
-        $data = $request->only('email', 'username', 'password', 'confirm_password', 'phone_number');
-
-        return User::create([
-            'name' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $params = $request->validated();
+        $params['password'] = Hash::make($request['password']);
+        if ($this->userRepository->create($params))
+            return redirect()->route('login');
     }
 
-    public function register()
+    public function showRegistrationForm()
     {
         return view('auth.register');
     }

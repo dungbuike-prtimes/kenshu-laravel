@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginFormRequest;
 use App\Providers\RouteServiceProvider;
-use http\Env\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -40,19 +41,17 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function login() {
+    public function showLoginForm() {
         return view('auth.login');
     }
 
-    public function auth(Request $request) {
-        $credentials = $request->only('email', 'password');
-
-        if(Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('home');
-        }
-
-        return redirect()->back()->withErrors('Login Failed');
+    public function login(LoginFormRequest $request)
+    {
+        $params = $request->validated();
+        if (Auth::attempt($params)) {
+            $request->session()->regenerateToken();
+            return redirect()->route('home');
+        };
+        return redirect()->back()->withErrors('Login fail');
     }
 }
