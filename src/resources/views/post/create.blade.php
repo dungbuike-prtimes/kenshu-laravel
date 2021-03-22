@@ -8,7 +8,7 @@
             </div>
             <div class="content-container__body">
 
-                <form id="form" class="form" method="post" action="{{ route('post.create') }}" enctype="multipart/form-data">
+                <form id="form" class="form" method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
                     @include('components.message')
                     @csrf
                     <div class="form__field">
@@ -22,13 +22,14 @@
                     <div class="form__field">
                         <label class="form__label" for="tag">Tag</label>
                         <div class="form__tag-field" id="tagField">
-                            <input id="create-tag" type="button" value="+ Create Tag" class="form__button--success --pull-right">
+                            <a href="{{ route('tag.create') }}" id="create-tag" type="button"
+                               class="form__button--success --pull-right">+ Create Tag</a>
                         </div>
                         <select id="tagSelect" class="form__input form__input--select2">
                             <option value="" selected disabled>Choose Tag</option>
-{{--                            @foreach ($data['tags'] as $tag)--}}
-{{--                                <option value="{{ $tag["id"] }}">{{ $tag['name'] }}</option>--}}
-{{--                            @endforeach--}}
+                            @foreach ($tags as $tag)
+                                <option value="{{ $tag["id"] }}">{{ $tag['name'] }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form__field">
@@ -55,7 +56,7 @@
     </div>
 </div>
 @endsection
-@section('script')
+@push('script')
 <script language="JavaScript">
     let tagSelect = document.getElementById('tagSelect');
     let tagField = document.getElementById('tagField');
@@ -68,7 +69,7 @@
             let tagValue = document.createElement('input');
             tagValue.hidden = true;
             tagValue.value = val;
-            tagValue.name = 'tag[]';
+            tagValue.name = 'tags[]';
 
             let tag = document.createElement('span');
             tag.classList.add('form__tag');
@@ -101,4 +102,4 @@
     })
 
 </script>
-@endsection
+@endpush

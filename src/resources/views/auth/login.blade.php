@@ -3,7 +3,7 @@
     <div class='form'>
         <div class='form__header'>
             <h1 class='form__header-text'>Login</h1>
-            <span>Don't have an account? <a href="{{ route('showRegistrationForm') }}">Register Now</a></span>
+            <span>Don't have an account? <a href="{{ route('showRegisterForm') }}">Register Now</a></span>
             <span>or back to <a href="/">Homepage</a></span>
         </div>
         <form class="form__body" method="post" action="{{ route('login') }}">

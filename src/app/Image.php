@@ -8,8 +8,10 @@ class Image extends Model
 {
     //
     protected $table = 'images';
+    protected $fillable = ['url', 'description', 'post_id'];
 
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo(Post::class);
     }
 }

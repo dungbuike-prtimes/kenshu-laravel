@@ -18,8 +18,16 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\UserRepository::class
         );
         $this->app->bind(
+            \App\Repositories\PostRepositoryInterface::class,
+            \App\Repositories\PostRepository::class
+        );
+        $this->app->bind(
             \App\Repositories\ImageRepositoryInterface::class,
             \App\Repositories\ImageRepository::class
+        );
+        $this->app->bind(
+            \App\Repositories\TagRepositoryInterface::class,
+            \App\Repositories\TagRepository::class
         );
     }
 

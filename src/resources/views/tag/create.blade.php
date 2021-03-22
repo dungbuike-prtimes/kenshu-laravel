@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post</title>
-    <link rel="stylesheet" href="../../../css/styles.css">
-</head>
-<body>
-<?php
-include_once __DIR__ . "/../layouts/header.blade.php";
-?>
+@extends('layouts.master')
+@section('content')
 <div class="main">
     <div class="main__wrapper">
         <div class="content-container">
@@ -16,17 +7,14 @@ include_once __DIR__ . "/../layouts/header.blade.php";
                 <h2>Create Tag</h2>
             </div>
             <div class="content-container__body">
-                <?php
-                include_once __DIR__ . "/../components/message.blade.php";
-                ?>
-
-                <form class="form--create-tag" method="post" action="/tags">
-                    <input type="hidden" name="csrf_token" value="<?php echo $data['csrf_token'];?>">
+                @include('components.message')
+                <form class="form--create-tag" method="post" action="{{ route('tag.store') }}">
+                    @csrf
                     <input name="name" type="text" placeholder="Tag name" class="form__input">
                     <textarea name="description" type="text" placeholder="Tag description" class="form__text-area"></textarea>
                     <div class="form__button-group">
                         <input type="submit" value="Create" class="form__button--success">
-                        <input id="cancel-button" type="button" value="Cancel" class="form__button--cancel">
+                        <a href="{{ route('post.index') }}" type="button" class="form__button--cancel">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -42,11 +30,4 @@ include_once __DIR__ . "/../layouts/header.blade.php";
         </div>
     </div>
 </div>
-</body>
-<script>
-    let cancelButton = document.getElementById('cancel-button');
-    cancelButton.addEventListener('click', () => {
-        history.go(-1);
-    })
-</script>
-</html>
+@endsection

@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\TagRepositoryInterface;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
+    private $tagRepository;
+
+    public function __construct(TagRepositoryInterface $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +32,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('tag.create');
     }
 
     /**
@@ -35,7 +43,17 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $params = Validator::make($request->only('name', 'description'), [
+           'name' => 'required|string|max:50',
+            'description'=> 'string|nullable'
+        ])->validated();
+
+        if ($this->tagRepository->create($params)) {
+            return redirect()->back()->with('success', 'Create success!');
+        } else {
+            return view('tag.create')
+                ->with('error', 'Create failed!');
+        }
     }
 
     /**

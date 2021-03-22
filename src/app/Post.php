@@ -10,8 +10,12 @@ use App\User;
 class Post extends Model
 {
     //
+    protected $table = 'posts';
+
+    protected $fillable = ['owner', 'title', 'content'];
+
     public function tags() {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class)->using(PostTag::class);
     }
 
     public function images() {

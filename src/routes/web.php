@@ -15,8 +15,8 @@
 Route::get('/', "HomeController@index")->name('home');
 Route::get('/login', "Auth\LoginController@showLoginForm")->name('showLoginForm');
 Route::post('/auth', "Auth\LoginController@login")->name('login');
-Route::get('/register', "Auth\RegisterController@showRegistrationForm")->name('showRegistrationForm');
-Route::post('/register', "Auth\RegisterController@create")->name('auth.create');
+Route::get('/register', "Auth\RegisterController@showRegistrationForm")->name('showRegisterForm');
+Route::post('/register', "Auth\RegisterController@create")->name('register');
 Route::get('/logout', "Auth\LoginController@logout")->name('logout')->middleware('auth');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'posts'], function ()  {
@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'posts'], function ()  {
     Route::get('/{id}/edit', "PostController@edit")->name('post.edit');
     Route::get('/{id}', "PostController@show")->name('post.show');
     Route::put('/{id}', "PostController@update")->name('post.update');
-    Route::delete('/{id}', "PostController@delete")->name('post.delete');
+    Route::delete('/{id}', "PostController@destroy")->name('post.destroy');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'tags'], function () {
