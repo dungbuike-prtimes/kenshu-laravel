@@ -93,7 +93,7 @@ li {
 
   &__header {
     padding-left: 20px;
-    height: 60px;
+    min-height: 60px;
     border-bottom: solid 1px #e6e6e6;
   }
 
@@ -134,7 +134,7 @@ li {
   border: solid 1px #e6e6e6;
   display: flex;
   flex-direction: column;
-  height: 150px;
+  height: 200px;
   box-sizing: border-box;
 
   &__title {
@@ -144,6 +144,7 @@ li {
     height: 20%;
     text-align: left;
     padding: 5px;
+    overflow: hidden;
   }
 
   &__content {
@@ -152,13 +153,14 @@ li {
     height: 60%;
     text-align: left;
     padding: 5px;
+    overflow: hidden;
   }
 
   &__tag-box {
     font-size: 13px;
     font-weight: bold;
     border-bottom: solid 1px #e6e6e6;
-    height: 20%;
+    height: 10%;
     display: flex;
     flex-direction: row;
     padding: 5px;

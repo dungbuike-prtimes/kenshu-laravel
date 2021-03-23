@@ -57,7 +57,7 @@ class PostController extends Controller
     {
         $params = $request->validated();
         $post = $this->postRepository->create($params);
-        if(isset($post)) {
+        if($post) {
             return redirect()->route('post.index')->with('success', 'Post is created!');
         } else {
             return redirect()->back()->withInput()->with('error', 'Create Failed!');
@@ -83,21 +83,29 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        return view('post.edit');
+        $post = $this->postRepository->getPost($id);
+        $tags = $this->tagRepository->all();
+        return view('post.edit', compact('post', 'tags'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
+     * @param PostFormRequest $request
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostFormRequest $request, $id)
     {
-        //
+        $params = $request->validated();
+        $params['id'] = $id;
+        if ($this->postRepository->update($params)) {
+            return redirect()->route('post.show', $id)->with('success', 'Update Complete!');
+        } else {
+            return redirect()->route('post.edit', $id)->with('error', 'Update Failed!');
+        }
     }
 
     /**

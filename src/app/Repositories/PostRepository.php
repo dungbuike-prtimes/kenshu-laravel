@@ -22,7 +22,12 @@ class PostRepository implements PostRepositoryInterface
 
     public function getAll()
     {
-        // TODO: Implement getAll() method.
+        $posts = $this->post
+            ->with('tags')
+            ->with('images')
+            ->orderBy('id', 'DESC')
+            ->get();
+        return $posts ? $posts : null;
     }
 
     public function getAllByUser($owner)
@@ -42,7 +47,6 @@ class PostRepository implements PostRepositoryInterface
     public function getPost($id)
     {
         return $this->post->whereId($id)
-            ->where('owner', '=', Auth::id())
             ->with('tags')
             ->with('images')
             ->first();
@@ -65,28 +69,88 @@ class PostRepository implements PostRepositoryInterface
             if (isset($params['images'])) {
                 foreach ($params['images'] as $img) {
                     $img->storePublicly('public/images');
-                    $this->insertImage($post->id, $img->hashName());
+                    $image = new Image();
+                    $image->description = '';
+                    $image->url = 'images/'.$img->hashName();
+                    $image->post_id = $post->id;
+                    $post->images()->save($image);
                 }
             }
             DB::commit();
-            return $post;
+            return true;
         } catch (PDOException $exception) {
             DB::rollBack();
-            return $exception;
+            return false;
         }
 
     }
 
+    /**
+     * @param $params
+     * @return bool
+     */
     public function update($params)
     {
-        // TODO: Implement update() method.
+
+        try {
+            DB::beginTransaction();
+            $post = $this->getPost($params['id']);
+            if($post['owner'] != Auth::id()) {
+                throw new \Exception('No permission to update!');
+            }
+            $post->title = $params['title'];
+            $post->content = $params['content'];
+            $post->save();
+
+            $post->tags()->detach();
+            if (isset($params['tags'])) {
+                foreach ($params['tags'] as $tag) {
+                    $post->tags()->attach($tag);
+                }
+            }
+            if (isset($params['deleteImage'])) {
+                foreach ($params['deleteImage'] as $img) {
+                    $image = Image::whereId($img)->first();
+                    if (isset($image) && $image['post_id'] == $params['id']) {
+                        if(!Storage::delete('/public/'.$image['url'])) {
+                            throw new \Exception('Cannot remove file!');
+                        }
+                        $image->forceDelete();
+                    }
+                }
+            }
+
+            if (isset($params['images'])) {
+                foreach ($params['images'] as $img) {
+                    $img->storePublicly('public/images');
+                    $image = new Image();
+                    $image->description = '';
+                    $image->url = 'images/'.$img->hashName();
+                    $image->post_id = $post->id;
+                    $post->images()->save($image);
+                }
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return false;
+        }
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function delete($id)
     {
         try {
             DB::beginTransaction();
             $post = $this->getPost($id);
+            if($post['owner'] != Auth::id()) {
+                throw new \Exception('No permission to delete!');
+            }
+
             if ($post) {
                 $post->tags()->detach();
                 foreach ($post->images as $img) {
@@ -103,18 +167,5 @@ class PostRepository implements PostRepositoryInterface
             DB::rollBack();
             return false;
         }
-    }
-
-    private function insertTag($post, $tag) {
-        $params['post_id'] = $post;
-        $params['tag_id'] = $tag;
-        PostTag::create($params);
-    }
-
-    private function insertImage($post, $img) {
-        $params['post_id'] = $post;
-        $params['description'] = '';
-        $params['url'] = 'images/'.$img;
-        Image::create($params);
     }
 }

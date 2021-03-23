@@ -31,7 +31,9 @@ class PostFormRequest extends FormRequest
             'images' => 'array',
             'images.*' => 'mimes:jpg,bmp,png,jpeg',
             'tags' => 'array',
-            'tags.*' => 'numeric'
+            'tags.*' => 'numeric',
+            'deleteImage' => 'array',
+            'deleteImage.*' => 'numeric'
         ];
     }
 

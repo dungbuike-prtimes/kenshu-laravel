@@ -7,42 +7,41 @@
                     <h2>Content</h2>
                 </div>
                 <div class="content-container__body">
-
                     <form id="form" class="form"
-                          action="{{ route(['post.update', $data['id']]) }}" method="post"
+                          action="{{ route('post.update', $post['id']) }}" method="post"
                           enctype="multipart/form-data">
+                        @include('components.message')
+
                         @csrf
                         @method('PUT')
+
                         <div class="form__field">
                             <label class="form__label" for="title">Title</label>
                             <input type="text" class="form__input" name="title" placeholder="Post Title"
-                                   value="{{ $data['post']['title'] }}">
+                                   value="{{ $post['title'] }}">
                         </div>
                         <div class="form__field">
                             <label class="form__label" for="content">Content</label>
                             <textarea class="form__text-area" name="content" placeholder="Post content"
-                            ></textarea>
+                            >{{ $post['content'] }}</textarea>
                         </div>
                         <div class="form__field">
                             <label class="form__label" for="tag">Tag</label>
                             <div class="form__tag-field" id="tagField">
-<!--                                --><?php
-//                                foreach ($data['post']['tags'] as $tag) {
-//                                    echo '<div class="form__tag-group">';
-//                                    echo '<input name="tags[]" type="hidden" value="' . $tag['id'] . '">';
-//                                    echo '<span class="form__tag">' . h($tag['name']) . '</span></div>';
-//                                }
-//                                ?>
+                                @foreach($post->tags as $tag)
+                                    <div class="form__tag-group">
+                                        <input name="tags[]" type="hidden" value="{{ $tag['id'] }}">
+                                        <span class="form__tag">{{ $tag['name'] }}</span>
+                                    </div>
+                                @endforeach
                                 <input id="create-tag" type="button" value="+ Create Tag"
                                        class="form__button--success --pull-right">
                             </div>
                             <select id="tagSelect" class="form__input form__input--select2">
                                 <option value="" selected disabled>Choose Tag</option>
-<!--                                --><?php
-//                                foreach ($data['tags'] as $tag) {
-//                                    echo '<option value="' . $tag["id"] . '">' . h($tag["NAME"]) . '</option>';
-//                                }
-//                                ?>
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form__field">
@@ -50,14 +49,14 @@
                             <input id="file-upload" type="file" class="form__file-upload" multiple name="images[]"
                                    placeholder="Upload Image">
                             <div class="form__image-preview">
-<!--                                --><?php
-//                                foreach ($data['post']['images'] as $image) {
-//                                    echo '<div class="form__image-preview-box">';
-//                                    echo '<img src="' . h($image['url']) . '">';
-//                                    echo '<a type="button" class="form__button--danger --bottom --center delete-image">Delete</a>';
-//                                    echo '<input type="hidden" value="' . $image['id'] . '"></div>';
-//                                }
-//                                ?>
+                                @foreach($post->images as $img)
+                                    <div class="form__image-preview-box">
+                                        <img src="{{ Storage::url($img['url']) }}">
+                                        <a type="button" class="form__button--danger --bottom --center delete-image">
+                                            Delete
+                                        </a><input type="hidden" value="{{ $img['id'] }}">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="form__button-group">
@@ -88,7 +87,7 @@
             <h3>Are you sure to delete this post</h3>
         </div>
         <div class="modal__content">
-            <form method="post" action="{{ route(['post.destroy', $data['id']]) }}">
+            <form method="post" action="{{ route('post.destroy', $post['id']) }}">
                 @method('DELETE')
                 @csrf
                 <input type="submit" class="form__button--danger" value="Sure, delete post!">
@@ -98,14 +97,14 @@
 
     </div>
 @endsection
-@section('script')
+@push('script')
     <script language="JavaScript">
         let form = document.getElementById('form');
         let tagSelect = document.getElementById('tagSelect');
         let tagField = document.getElementById('tagField');
         let tagSelectedArr = [];
         <?php
-        foreach ($data['post']['tags'] as $tag) {
+        foreach ($post['tags'] as $tag) {
             echo 'tagSelectedArr.push("' . $tag['id'] . '");';
         }
         ?>
@@ -165,6 +164,7 @@
                 deleteImageHiddenInput.hidden = true;
                 deleteImageHiddenInput.name = "deleteImage[]";
                 deleteImageHiddenInput.value = element.nextSibling.value;
+                console.log(element.nextSibling);
                 form.appendChild(deleteImageHiddenInput);
                 element.parentNode.remove();
             })
@@ -198,6 +198,5 @@
                 modal.style.display = "none";
             }
         }
-
     </script>
-@endsection
+@endpush

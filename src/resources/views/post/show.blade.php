@@ -3,14 +3,15 @@
     <div class="main">
         <div class="main__wrapper">
             <div class="content-container">
-                @include('components.message')
                 <div class="content-container__header">
-                    <h2></h2>
+                    <h2>Show</h2>
                 </div>
                 <div class="content-container__body">
                     <div id="form" class="form">
+                        @include('components.message')
                         <div class="form__field">
-                            <p></p>
+                            <h2>{{ $post['title'] }}</h2>
+                            <p>{{ $post['content'] }}</p>
                             <div class="form__image-preview">
                                 @foreach($post->images as $img)
                                     <div class="form__image-preview-box">
@@ -28,11 +29,13 @@
 
                         </div>
                         <div class="form__button-group">
-                            <input id="cancel-button" type="button" class="form__button--cancel" value="Back">
+                            <a onclick="history.back()" type="button" class="form__button--cancel">Back</a>
+                            @if (\Illuminate\Support\Facades\Auth::id() == $post['owner'])
                             <a type="button" href="{{ route('post.edit', $post['id']) }}"
                                class="form__button--success --pull-right">Edit Post</a>
                             <input id="delete-button" type="button" class="form__button--danger --pull-right"
                                    value="Delete this post">
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -89,10 +92,6 @@
         //     })
         // })
         //
-        let cancelButton = document.getElementById('cancel-button');
-        cancelButton.addEventListener('click', () => {
-            history.back();
-        })
         let modal = document.getElementById("myModal");
 
         // Get the button that opens the modal

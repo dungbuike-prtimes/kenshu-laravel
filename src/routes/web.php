@@ -24,7 +24,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'posts'], function ()  {
     Route::get('/create', "PostController@create")->name('post.create');
     Route::post('/', "PostController@store")->name('post.store');
     Route::get('/{id}/edit', "PostController@edit")->name('post.edit');
-    Route::get('/{id}', "PostController@show")->name('post.show');
     Route::put('/{id}', "PostController@update")->name('post.update');
     Route::delete('/{id}', "PostController@destroy")->name('post.destroy');
 });
@@ -36,3 +35,4 @@ Route::group(['middleware' => 'auth', 'prefix' => 'tags'], function () {
     Route::put('/{id}', "TagController@update")->name('tag.update');
 });
 
+Route::get('posts/{id}', "PostController@show")->name('post.show');
