@@ -77,7 +77,9 @@ class RegisterController extends Controller
         $params = $request->validated();
         $params['password'] = Hash::make($request['password']);
         if ($this->userRepository->create($params))
-            return redirect()->route('showLoginForm');
+            return redirect()->route('showLoginForm')->with('success', 'Account is created');
+
+        return redirect()->back()->with('error', 'Register Failed!');
     }
 
     public function showRegistrationForm()

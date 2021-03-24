@@ -16,10 +16,11 @@ class PostController extends Controller
     private $tagRepository;
     private $imageRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository,
-                                TagRepositoryInterface $tagRepository,
-                                ImageRepositoryInterface $imageRepository)
-    {
+    public function __construct(
+        PostRepositoryInterface $postRepository,
+        TagRepositoryInterface $tagRepository,
+        ImageRepositoryInterface $imageRepository
+    ) {
         $this->postRepository = $postRepository;
         $this->tagRepository = $tagRepository;
         $this->imageRepository = $imageRepository;

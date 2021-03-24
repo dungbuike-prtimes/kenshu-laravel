@@ -8,7 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Redirect;
 class LoginController extends Controller
 {
     /*
@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -50,8 +50,8 @@ class LoginController extends Controller
         $params = $request->validated();
         if (Auth::attempt($params)) {
             $request->session()->regenerateToken();
-            return redirect()->route('home');
+            return Redirect::route('home');
         };
-        return redirect()->back()->withErrors('Login fail');
+        return redirect()->back()->with('error', 'Login fail');
     }
 }

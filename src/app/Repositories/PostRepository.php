@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Image;
 use App\Post;
 use App\PostTag;
+use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,12 +15,16 @@ use PDOException;
 
 class PostRepository implements PostRepositoryInterface
 {
+    /** @var Model/Post  */
     private $post;
 
     public function __construct() {
         $this->post = new Post();
     }
 
+    /**
+     * @return all Post of all User
+     */
     public function getAll()
     {
         $posts = $this->post
@@ -30,6 +35,11 @@ class PostRepository implements PostRepositoryInterface
         return $posts ? $posts : null;
     }
 
+    /**
+     * get all Post of current user
+     * @param $owner
+     * @return mixed post list or null
+     */
     public function getAllByUser($owner)
     {
         $posts = $this->post->where('owner', '=', $owner)
@@ -41,8 +51,9 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
+     * Get a Post specified by id property
      * @param $id
-     * @return mixed
+     * @return mixed one post
      */
     public function getPost($id)
     {
@@ -52,6 +63,11 @@ class PostRepository implements PostRepositoryInterface
             ->first();
     }
 
+    /**
+     * Create a Post with Tag & Image
+     * @param $params validated request
+     * @return bool
+     */
     public function create($params)
     {
         try {
@@ -82,11 +98,10 @@ class PostRepository implements PostRepositoryInterface
             DB::rollBack();
             return false;
         }
-
     }
 
     /**
-     * @param $params
+     * @param $params  validated request
      * @return bool
      */
     public function update($params)

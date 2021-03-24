@@ -14,7 +14,7 @@
 
 Route::get('/', "HomeController@index")->name('home');
 Route::get('/login', "Auth\LoginController@showLoginForm")->name('showLoginForm');
-Route::post('/auth', "Auth\LoginController@login")->name('login');
+Route::post('/login', "Auth\LoginController@login")->name('login');
 Route::get('/register', "Auth\RegisterController@showRegistrationForm")->name('showRegisterForm');
 Route::post('/register', "Auth\RegisterController@create")->name('register');
 Route::get('/logout', "Auth\LoginController@logout")->name('logout')->middleware('auth');
