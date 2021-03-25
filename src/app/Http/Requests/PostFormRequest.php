@@ -14,8 +14,7 @@ class PostFormRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::check()) return true;
-        return false;
+        return Auth::check();
     }
 
     /**

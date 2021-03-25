@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Image::class, function (Faker $faker) {
     return [
+        'id' => $faker->randomNumber(),
         'post_id' => function() {
             return factory(\App\User::class)->create()->id;
         },
