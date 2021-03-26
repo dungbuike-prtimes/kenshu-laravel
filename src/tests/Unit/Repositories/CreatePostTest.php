@@ -2,15 +2,13 @@
 
 namespace Tests\Unit\Repositories;
 
+use App\Post;
 use App\Repositories\PostRepository;
-use App\Repositories\PostRepositoryInterface;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-use Mockery;
 
 class CreatePostTest extends TestCase
 {
@@ -32,11 +30,29 @@ class CreatePostTest extends TestCase
      * @dataProvider createPostDataProvider : array
      * @param $params
      */
-    public function testCreatePostSuccessReturnTrue($params)
+    public function testCreatePostSuccess($params)
     {
         $user = factory(User::class)->create();
         $response = $this->actingAs($user)->PostRepo->create($params);
-        $this->assertTrue($response);
+        $this->assertDatabaseHas('posts', ['id' => $response->id]);
+        if (isset($params['images'])) {
+            Storage::assertExists(Storage::files('public/images'.$params['images'][0]->hashName()));
+            foreach ($params['images'] as $img) {
+                Storage::assertExists(Storage::files('public/images'.$params['images'][0]->hashName()));
+                $this->assertDatabaseHas('images', [
+                    'post_id' => $response->id,
+                    'url' => 'images/'.$img->hashName()
+                ]);
+            }
+        }
+        if(isset($params['tags'])) {
+            foreach ($params['tags'] as $tag_id) {
+                $this->assertDatabaseHas('post_tag', [
+                    'post_id' => $response->id,
+                    'tag_id' => $tag_id
+                ]);
+            }
+        }
     }
 
     public function createPostDataProvider(): array

@@ -58,7 +58,7 @@ class PostController extends Controller
     {
         $params = $request->validated();
         $post = $this->postRepository->create($params);
-        if($post) {
+        if(isset($post)) {
             return redirect()->route('post.index')->with('success', 'Post is created!');
         } else {
             return redirect()->back()->withInput()->with('error', 'Create Failed!');
@@ -102,7 +102,8 @@ class PostController extends Controller
     {
         $params = $request->validated();
         $params['id'] = $id;
-        if ($this->postRepository->update($params)) {
+        $post = $this->postRepository->update($params);
+        if (isset($post)) {
             return redirect()->route('post.show', $id)->with('success', 'Update Complete!');
         } else {
             return redirect()->route('post.edit', $id)->with('error', 'Update Failed!');
@@ -117,7 +118,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->postRepository->delete($id)) {
+        $post = $this->postRepository->delete($id);
+        if (isset($post)) {
             return redirect()->route('post.index')->with('success', 'Delete post success!');
         } else {
             return redirect()->route('post.index')->with('error', 'Delete post Failed!');

@@ -56,10 +56,13 @@ class PostControllerTest extends TestCase
                 UploadedFile::fake()->image('image1.jpg'),
                 UploadedFile::fake()->image('image2.jpeg')
             ]
-
         ];
 
         $response = $this->actingAs($user)->post('/posts', $formData);
+        $this->assertDatabaseHas('posts', [
+            'title' => $formData['title'],
+            'content' => $formData['content']
+        ]);
         $response->assertRedirect('/posts');
         $response->assertSessionHas('success');
     }

@@ -93,10 +93,10 @@ class PostRepository implements PostRepositoryInterface
                 }
             }
             DB::commit();
-            return true;
+            return $this->getPost($post->id);
         } catch (PDOException $exception) {
             DB::rollBack();
-            return false;
+            return null;
         }
     }
 
@@ -146,10 +146,10 @@ class PostRepository implements PostRepositoryInterface
                 }
             }
             DB::commit();
-            return true;
+            return $this->getPost($post->id);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return false;
+            return null;
         }
     }
 
@@ -177,10 +177,10 @@ class PostRepository implements PostRepositoryInterface
                 $post->forceDelete();
             }
             DB::commit();
-            return true;
+            return $post;
         } catch (\Exception $e) {
             DB::rollBack();
-            return false;
+            return null;
         }
     }
 }
